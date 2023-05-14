@@ -1,0 +1,210 @@
+@detectDelim
+
+@top TurtleDoc {
+  Statement*
+}
+
+Statement {
+  Directive | Triples '.'
+}
+
+Directive {
+  PrefixID | Base | SparqlPrefix | SparqlBase
+}
+
+PrefixID {
+  '@prefix' Pname_ns Iriref '.'
+}
+
+Base {
+  '@base' Iriref '.'
+}
+
+SparqlBase {
+  "BASE" Iriref
+}
+
+SparqlPrefix {
+  "PREFIX" Pname_ns Iriref
+}
+
+Triples	{
+  Subject ( PredicateObjectList | BlankNodePropertyList ) PredicateObjectList?  
+}
+
+PredicateObjectList {
+  Verb ObjectList (';' (Verb ObjectList)?)*
+}
+
+ObjectList {
+  Object (',' Object)*
+}
+
+Verb {
+  Predicate | 'a'
+}
+
+Subject {
+  Iri | BlankNode | Collection
+}
+
+Predicate {
+  Iri
+}
+
+Object {
+  Iri | BlankNode | Collection | BlankNodePropertyList | Literal
+}
+
+Literal {
+  RdfLiteral | NumericLiteral | BooleanLiteral
+}
+
+BlankNodePropertyList {
+  '[' PredicateObjectList ']'
+}
+
+Collection {
+  '(' Object* ')'
+}
+
+NumericLiteral {
+  Integer | Decimal | Double
+}
+
+RdfLiteral {
+  String (Langtag | ('^^' Iri))
+}
+
+BooleanLiteral {
+  'true' | 'false'
+}
+
+String {
+  String_literal_quote | String_literal_single_quote | String_literal_long_single_quote | String_literal_long_quote
+}
+
+Iri {
+  Iriref | PrefixedName
+}
+
+@precedence { 
+
+}
+
+
+PrefixedName {
+  Pname_ln | Pname_ns
+}
+
+BlankNode {
+  Blank_node_label | Anon
+}
+
+@tokens {
+  Iriref {
+    '<' ![\u{00}\u{20}\<\>\"\{\}\|\^\`\\] '>'
+  }
+
+  Pname_ns {
+    Pn_prefix? ':'
+  }
+
+  Pname_ln {
+    Pname_ns Pn_local
+  }
+
+  Blank_node_label {
+    '_:' (Pn_chars_u | $[0-9]) ((Pn_chars | '.')* Pn_chars)?
+  }
+
+  Langtag {
+    '@' $[a-zA-Z]+ ('-' $[a-zA-Z0-9]+)*
+  }
+
+  Integer {
+    $[+-]? $[0-9]+
+  }
+
+  Decimal {
+    $[+-]? $[0-9]* '.' $[0-9]+
+  }
+
+  Double {
+    $[+-]? ($[0-9]+ '.' $[0-9]* Exponent | '.' $[0-9]+ Exponent | $[0-9]+ Exponent)
+  }
+
+  Exponent {
+    $[eE] $[+-]? $[0-9]+
+  }
+
+  String_literal_quote {
+    '"' ( $[\u{22}] | $[\u{000A}] | $[\u{A}] | $[\u{D}] | Echar | Uchar)* '"'
+  }
+
+  String_literal_single_quote {
+    '\'' ( $[\u{22}] | $[\u{000A}] | $[\u{A}] | $[\u{D}] | Echar | Uchar)* '\''
+  }
+
+  String_literal_long_single_quote {
+    "'''" (("'" | "''")? (!['] | Echar | Uchar))* "'''"
+  }
+
+  String_literal_long_quote {
+    '"""' (('"' | '""')? (!["] | Echar | Uchar))* '"""'
+  }
+
+  Uchar {
+    '\u' Hex Hex Hex Hex | '\U' Hex Hex Hex Hex Hex Hex Hex Hex
+  }
+
+  Echar {
+    '\\' $[tbnrf\"\'\\]
+  }
+
+  Ws {
+    $[\u{20}] | $[\u{x9}] | $[\u{xD}] | $[\u{xA}]
+  }
+
+  Anon {
+    '[' Ws* ']'
+  }
+
+  Pn_chars_base {
+    $[A-Z] | $[a-z] | $[\u{00C0}\u{00D6}] | $[\u{00D8}\u{00F6}] | $[\u{00F8}\u{02FF}] | $[\u{0370}\u{037D}] | $[\u{037F}\u{1FFF}] | $[\u{200C}\u{200D}] | $[\u{2070}\u{218F}] | $[\u{2C00}\u{2FEF}] | $[\u{3001}\u{D7FF}] | $[\u{F900}\u{FDCF}] | $[\u{FDF0}\u{FFFD}] | $[\u{10000}\u{EFFFF}]
+  }
+
+  Pn_chars_u {
+    Pn_chars_base | '_'
+  }
+
+  Pn_chars {
+    Pn_chars_u | '-' | $[0-9] | $[\u{00B7}] | $[\u{0300}\u{036F}] | $[\u{203F}\u{2040}]
+  }
+
+  Pn_prefix {
+    Pn_chars_base ((Pn_chars | '.')* Pn_chars)?
+  }
+
+  Pn_local {
+    (Pn_chars_u | ':' | $[0-9] | Plx) ((Pn_chars | '.' | ':' | Plx)* (Pn_chars | ':' | Plx))?
+  }
+
+  Plx {
+    Percent | Pn_local_esc
+  }
+
+  Percent {
+    '%' Hex Hex
+  }
+
+  Hex {
+    $[0-9] | $[A-F] | $[a-f]
+  }
+
+  Pn_local_esc {
+    '\\' ('_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%')
+  }
+
+  "_:" "{" "}" "." "," ";"
+}
