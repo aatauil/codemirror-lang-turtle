@@ -101,7 +101,17 @@ BlankNode {
   Blank_node_label | Anon
 }
 
+@skip {
+  space  |  comment
+}
+
 @tokens {
+  space { @whitespace+ }
+  
+  comment {
+    '#'+  ![\n]* "\n"? ('#'+ ![\n]* "\n")*
+  }
+
   Iriref {
     '<' ![\u{00}\u{20}\<\>\"\{\}\|\^\`\\] '>'
   }
