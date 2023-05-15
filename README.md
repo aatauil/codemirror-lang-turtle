@@ -4,9 +4,6 @@
 
 A CodeMirror extension that provides Turtle syntax highlighting and language support.
 
-## Note
-This parser is in a usable state but still have big plans for it. Breaking changes can be expected
-
 ### Usage
 
 ```ts
@@ -16,7 +13,16 @@ import { EditorState } from '@codemirror/state';
 import { turtle } from 'codemirror-lang-turtle';
 
 const doc = `
- SELECT * WHERE { ?s ?p ?o }
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix ex: <http://example.org/stuff/1.0/> .
+
+<http://www.w3.org/TR/rdf-syntax-grammar>
+  dc:title "RDF/XML Syntax Specification (Revised)" ;
+  ex:editor [
+    ex:fullname "Dave Beckett";
+    ex:homePage <http://purl.org/net/dajobe/>
+  ] .
 `
 
 new EditorView({
