@@ -33,7 +33,7 @@ Triples	{
 }
 
 PredicateObjectList {
-  Verb ObjectList (';' (Verb ObjectList)?)*
+  Verb ObjectList (';' Verb ObjectList)*
 }
 
 ObjectList {
@@ -73,7 +73,7 @@ NumericLiteral {
 }
 
 RdfLiteral {
-  String (Langtag | ('^^' Iri))
+  String (Langtag | ('^^' Iri))?
 }
 
 BooleanLiteral {
