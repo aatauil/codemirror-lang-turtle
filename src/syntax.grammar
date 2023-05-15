@@ -88,11 +88,6 @@ Iri {
   Iriref | PrefixedName
 }
 
-@precedence { 
-
-}
-
-
 PrefixedName {
   Pname_ln | Pname_ns
 }
