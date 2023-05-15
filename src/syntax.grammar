@@ -119,6 +119,10 @@ BlankNode {
     Pname_ns Pn_local
   }
 
+  @precedence {
+    Pname_ln, Pname_ns, "BASE", "PREFIX", "false", "true", String_literal_long_quote, String_literal_quote, "a", Double, Decimal, Integer, space
+  }
+  
   Blank_node_label {
     '_:' (Pn_chars_u | $[0-9]) ((Pn_chars | '.')* Pn_chars)?
   }
