@@ -97,13 +97,13 @@ BlankNode {
 }
 
 @skip {
-  space  |  comment
+  space  |  Comment
 }
 
 @tokens {
   space { @whitespace+ }
   
-  comment {
+  Comment {
     '#'+  ![\n]* "\n"? ('#'+ ![\n]* "\n")*
   }
 
@@ -215,5 +215,5 @@ BlankNode {
     '\\' ('_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%')
   }
 
-  ";" "^^" "." "_:" "," "[" "]"
+  ";" "^^" "." "_:" "," "[" "]" "@prefix" "@base" "BASE" "PREFIX"
 }
